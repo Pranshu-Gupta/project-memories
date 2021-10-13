@@ -65,7 +65,8 @@ const Auth = () => {
       console.log(error);
     }
   };
-  const googleError = () => {
+  const googleError = (res) => {
+    console.log(res);
     console.log('Google Sign In was unsuccessful. Try again later.');
   };
   return (
