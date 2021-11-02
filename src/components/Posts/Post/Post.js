@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Card,
   CardActions,
@@ -19,6 +19,12 @@ import useStyles from './styles';
 import { useHistory } from 'react-router-dom';
 
 const Post = ({ post, setCurrentId }) => {
+  const user = JSON.parse(localStorage.getItem('profile'));
+
+  const userId = user?.result?.googleId || user?.result?._id;
+  const hasLikedPost = post?.likes?.find((like) => like === userId);
+  const [likes, setLikes] = useState(post?.likes);
+
   const classes = useStyles();
   const dispatch = useDispatch();
   const history = useHistory();
@@ -27,28 +33,31 @@ const Post = ({ post, setCurrentId }) => {
     dispatch({ type: 'CLEAR' });
   }, [dispatch]);
 
-  const user = JSON.parse(localStorage.getItem('profile'));
-
   const checkForUser =
     user?.result?.googleId === post?.creator ||
     user?.result?._id === post?.creator;
 
+  const handleLike = async () => {
+    dispatch(likePost(post._id, post));
+    if (hasLikedPost) {
+      setLikes(post.likes.filter((id) => id !== userId));
+    } else setLikes([...post.likes, userId]);
+  };
+
   const Likes = () => {
-    if (post.likes.length > 0) {
-      return post.likes.find(
-        (like) => like === (user?.result?.googleId || user?.result?._id)
-      ) ? (
+    if (likes.length > 0) {
+      return likes.find((like) => like === userId) ? (
         <>
           <ThumbUpAltIcon fontSize='small' />
           &nbsp;
-          {post.likes.length > 2
-            ? `You and ${post.likes.length - 1} others`
-            : `${post.likes.length} like${post.likes.length > 1 ? 's' : ''}`}
+          {likes.length > 2
+            ? `You and ${likes.length - 1} others`
+            : `${likes.length} like${likes.length > 1 ? 's' : ''}`}
         </>
       ) : (
         <>
           <ThumbUpAltOutlined fontSize='small' />
-          &nbsp;{post.likes.length} {post.likes.length === 1 ? 'Like' : 'Likes'}
+          &nbsp;{likes.length} {likes.length === 1 ? 'Like' : 'Likes'}
         </>
       );
     }
@@ -122,7 +131,7 @@ const Post = ({ post, setCurrentId }) => {
           size='small'
           color='primary'
           disabled={!user?.result}
-          onClick={() => dispatch(likePost(post._id, post))}
+          onClick={handleLike}
         >
           <Likes />
         </Button>

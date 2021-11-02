@@ -6,6 +6,7 @@ import {
   UPDATE,
   DELETE,
   LIKE,
+  COMMENT,
 } from '../constants/actionTypes';
 
 const postReducer = (state = { isLoading: true, posts: [] }, action) => {
@@ -35,6 +36,13 @@ const postReducer = (state = { isLoading: true, posts: [] }, action) => {
     case CREATE:
       return { ...state, posts: [...state.posts, action.payload] };
     case UPDATE:
+      return {
+        ...state,
+        posts: state.posts.map((post) =>
+          post._id === action.payload._id ? action.payload : post
+        ),
+      };
+    case COMMENT:
       return {
         ...state,
         posts: state.posts.map((post) =>
