@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import {
   Paper,
   Typography,
-  CircularProgress,
+  // CircularProgress,
   Divider,
   Grid,
 } from '@material-ui/core/';
