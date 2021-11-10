@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, CircularProgress } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import { useSelector } from 'react-redux';
 
 import Post from './Post/Post';
@@ -7,12 +7,11 @@ import useStyles from './styles';
 
 const Posts = ({ setCurrentId }) => {
   const { posts, isLoading } = useSelector((state) => state.posts);
+  // const MyFacebookLoader = () => <Facebook />;
   const classes = useStyles();
   // console.log(posts);
   if (!posts?.length && !isLoading) return 'No Posts!';
-  return isLoading ? (
-    <CircularProgress />
-  ) : (
+  return (
     <Grid
       className={classes.container}
       container

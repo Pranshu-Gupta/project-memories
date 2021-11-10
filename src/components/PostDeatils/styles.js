@@ -5,7 +5,8 @@ export default makeStyles((theme) => ({
     borderRadius: '20px',
     objectFit: 'cover',
     width: '100%',
-    maxHeight: '600px',
+    // maxHeight: '200vh',
+    maxWidth: '100vh',
   },
   card: {
     display: 'flex',
@@ -18,6 +19,7 @@ export default makeStyles((theme) => ({
   section: {
     borderRadius: '20px',
     margin: '10px',
+    // flexFlow: 'row wrap',
     flex: 1,
   },
   imageSection: {
@@ -47,6 +49,10 @@ export default makeStyles((theme) => ({
   commentsInnerContainer: {
     height: '200px',
     overflowY: 'auto',
+    // overflowX: 'auto'
+    // overflow: 'auto',
+    // padding: '10 px',
+    // display: 'inline',
     marginRight: '30px',
   },
 }));

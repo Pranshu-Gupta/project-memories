@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   Card,
   CardActions,
   CardContent,
   CardMedia,
   Button,
-  // ButtonBase,
   Typography,
 } from '@material-ui/core/';
 import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt';
@@ -13,10 +12,12 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import ThumbUpAltOutlined from '@material-ui/icons/ThumbUpAltOutlined';
 import moment from 'moment';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+
 import { deletePost, likePost } from '../../../actions/posts';
 import useStyles from './styles';
 import { useHistory } from 'react-router-dom';
+import { Instagram } from 'react-content-loader';
 
 const Post = ({ post, setCurrentId }) => {
   const user = JSON.parse(localStorage.getItem('profile'));
@@ -24,14 +25,11 @@ const Post = ({ post, setCurrentId }) => {
   const userId = user?.result?.googleId || user?.result?._id;
   const hasLikedPost = post?.likes?.find((like) => like === userId);
   const [likes, setLikes] = useState(post?.likes);
+  const { isLoading } = useSelector((state) => state.posts);
 
   const classes = useStyles();
   const dispatch = useDispatch();
   const history = useHistory();
-
-  useEffect(() => {
-    dispatch({ type: 'CLEAR' });
-  }, [dispatch]);
 
   const checkForUser =
     user?.result?.googleId === post?.creator ||
@@ -71,14 +69,10 @@ const Post = ({ post, setCurrentId }) => {
   };
   const openPost = (e) => history.push(`/posts/${post._id}`);
 
-  return (
+  return isLoading ? (
+    <Instagram />
+  ) : (
     <Card className={classes.card} raised elevation={6}>
-      {/* <ButtonBase
-        component='span'
-        name='test'
-        className={classes.cardAction}
-        onClick={openPost}
-      > */}
       <div style={{ cursor: 'pointer' }} onClick={openPost}>
         <CardMedia
           className={classes.media}
@@ -109,13 +103,18 @@ const Post = ({ post, setCurrentId }) => {
           {post.title}
         </Typography>
         <CardContent>
-          <Typography variant='body2' color='textSecondary' component='p'>
+          <Typography
+            variant='body2'
+            noWrap
+            color='textSecondary'
+            component='p'
+          >
             {post.message}
           </Typography>
         </CardContent>
         {/* </ButtonBase> */}
       </div>
-      {checkForUser && (
+      {checkForUser && setCurrentId && (
         <div className={classes.overlay2}>
           <Button
             style={{ color: 'white' }}
