@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const API = axios.create({
-  baseURL: 'https://memories----project-api.herokuapp.com',
+  baseURL: 'https://project-memories-api.vercel.app',
   // baseURL: 'http://localhost:5000',
 });
 
